@@ -50,7 +50,11 @@ inline long long hash_int64(long long key) {
  */
 
 inline long long hash_string(const char *arKey, int nKeyLength) {
+#ifndef __i386__
   const long long m = 0xc6a4a7935bd1e995;
+#else
+  const long long m = 0xc6a4a7935bd1e995ll;
+#endif
   const int r = 47;
 
   register unsigned long long h = 0;
@@ -85,12 +89,19 @@ inline long long hash_string(const char *arKey, int nKeyLength) {
   h ^= h >> r;
   h *= m;
   h ^= h >> r;
-
+#ifndef __i386__
   return h & 0x7fffffffffffffff;
+#else
+  return h & 0x7fffffffffffffffll;
+#endif  
 }
 
 inline long long hash_string_i(const char *arKey, int nKeyLength) {
+#ifndef __i386__
   const unsigned long long m = 0xc6a4a7935bd1e995;
+#else
+  const unsigned long long m = 0xc6a4a7935bd1e995ll;
+#endif
   const int r = 47;
 
   register unsigned long long h = 0;
@@ -100,8 +111,11 @@ inline long long hash_string_i(const char *arKey, int nKeyLength) {
 
   while (data != end) {
     unsigned long long k = *data++;
+#ifndef __i386__
     k &= 0xdfdfdfdfdfdfdfdf; // a-z => A-Z
-
+#else
+    k &= 0xdfdfdfdfdfdfdfdfll; // a-z => A-Z
+#endif
     k *= m;
     k ^= k >> r;
     k *= m;
@@ -126,8 +140,11 @@ inline long long hash_string_i(const char *arKey, int nKeyLength) {
   h ^= h >> r;
   h *= m;
   h ^= h >> r;
-
+#ifndef __i386__
   return h & 0x7fffffffffffffff;
+#else
+  return h & 0x7fffffffffffffffll;
+#endif
 }
 
 #else /* not using murmur hashing */
@@ -304,7 +321,11 @@ inline bool is_strictly_integer(const char* arKey, size_t nKeyLength,
           break;
         }
       }
+#ifndef __i386__
       if (good && num <= 0x7FFFFFFFFFFFFFFF) {
+#else
+      if (good && num <= 0x7FFFFFFFFFFFFFFFll) {
+#endif
         res = neg ? 0 - num : (int64)num;
         return true;
       }

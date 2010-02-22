@@ -92,7 +92,11 @@ public:
   Variant(int     v) : m_type(KindOfInt32 )   { m_data.num = v;}
   Variant(int64   v) : m_type(KindOfInt64 )   { m_data.num = v;}
   Variant(uint64  v) : m_type(KindOfInt64 )   { m_data.num = v;}
+#ifndef __i386__
   Variant(ssize_t v) : m_type(KindOfInt64 )   { m_data.num = v;}
+#else
+  Variant(long int v) : m_type(KindOfInt64 )   { m_data.num = v;}
+#endif
   Variant(double  v) : m_type(KindOfDouble )  { m_data.dbl = v;}
   Variant(litstr  v) : m_type(LiteralString)  { m_data.str = v;}
 

@@ -71,6 +71,7 @@ hash_tiger::hash_tiger(bool tiger3, int digest)
   round(a,b,c,x6,mul);       \
   round(b,c,a,x7,mul);
 
+#ifndef __i386__
 #define key_schedule                        \
   x0 -= x7 ^ L64(0xA5A5A5A5A5A5A5A5);       \
   x1 ^= x0;                                 \
@@ -88,6 +89,25 @@ hash_tiger::hash_tiger(bool tiger3, int digest)
   x5 ^= x4;                                 \
   x6 += x5;                                 \
   x7 -= x6 ^ L64(0x0123456789ABCDEF);
+#else // __i386__
+#define key_schedule                        \
+  x0 -= x7 ^ L64(0xA5A5A5A5A5A5A5A5ll);       \
+  x1 ^= x0;                                 \
+  x2 += x1;                                 \
+  x3 -= x2 ^ ((~x1)<<19);                   \
+  x4 ^= x3;                                 \
+  x5 += x4;                                 \
+  x6 -= x5 ^ ((~x4)>>23);                   \
+  x7 ^= x6;                                 \
+  x0 += x7;                                 \
+  x1 -= x0 ^ ((~x7)<<19);                   \
+  x2 ^= x1;                                 \
+  x3 += x2;                                 \
+  x4 -= x3 ^ ((~x2)>>23);                   \
+  x5 ^= x4;                                 \
+  x6 += x5;                                 \
+  x7 -= x6 ^ L64(0x0123456789ABCDEFll);
+#endif // __i386__
 
 #define feedforward                             \
   a ^= aa;                                      \
@@ -185,9 +205,15 @@ void hash_tiger::hash_init(void *context_) {
   if (!m_tiger3) {
     context->passes = 1;
   }
+#ifndef __i386__
   context->state[0] = L64(0x0123456789ABCDEF);
   context->state[1] = L64(0xFEDCBA9876543210);
   context->state[2] = L64(0xF096A5B4C3B2E187);
+#else
+  context->state[0] = L64(0x0123456789ABCDEFll);
+  context->state[1] = L64(0xFEDCBA9876543210ll);
+  context->state[2] = L64(0xF096A5B4C3B2E187ll);
+#endif
 }
 
 void hash_tiger::hash_update(void *context_, const unsigned char *input,
