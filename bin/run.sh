@@ -5,7 +5,6 @@
    #echo make -j $3 PROJECT_NAME=$2 TIME_LINK=1 -C $1
 cp $HPHP_HOME/bin/CMakeLists.base.txt $1/CMakeLists.txt
 cd $1
-export HPHP_PROGRAM_NAME=$2
-cmake .
+cmake -D PROGRAM_NAME:string=$2 .
 make
 
