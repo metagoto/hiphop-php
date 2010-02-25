@@ -451,7 +451,7 @@ bool TestExtArray::test_array_merge() {
 #ifndef __i386__    
     int64 id = 100000000000022;
 #else
-    int64 id = 100000000000022ll;
+    int64 id = 100000000000022LL;
 #endif
     Array a = CREATE_MAP1(id, 1);
     Array b = CREATE_MAP1(id, 2);

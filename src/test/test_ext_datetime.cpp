@@ -267,7 +267,7 @@ bool TestExtDatetime::test_date() {
 #ifndef __i386__
  VS(f_date("r", -5000000000), "Tue, 23 Jul 1811 07:06:40 -0800");
 #else
- VS(f_date("r", -5000000000ll), "Tue, 23 Jul 1811 07:06:40 -0800");
+ VS(f_date("r", -5000000000LL), "Tue, 23 Jul 1811 07:06:40 -0800");
 #endif
   return Count(true);
 }
