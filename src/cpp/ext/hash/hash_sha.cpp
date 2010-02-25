@@ -527,7 +527,6 @@ void hash_sha256::hash_final(unsigned char *digest, void *context_) {
 /* OM1 */
 #define SHA512_F5(x)		(ROTR64(19, x) ^ ROTR64(61, x) ^ SHR(6, x))
 
-#ifndef __i386__
 static const unsigned long SHA512_K[128] = {
   L64(0x428a2f98d728ae22), L64(0x7137449123ef65cd), L64(0xb5c0fbcfec4d3b2f), L64(0xe9b5dba58189dbbc),
   L64(0x3956c25bf348b538), L64(0x59f111f1b605d019), L64(0x923f82a4af194f9b), L64(0xab1c5ed5da6d8118),
@@ -549,29 +548,6 @@ static const unsigned long SHA512_K[128] = {
   L64(0x06f067aa72176fba), L64(0x0a637dc5a2c898a6), L64(0x113f9804bef90dae), L64(0x1b710b35131c471b),
   L64(0x28db77f523047d84), L64(0x32caab7b40c72493), L64(0x3c9ebe0a15c9bebc), L64(0x431d67c49c100d4c),
   L64(0x4cc5d4becb3e42b6), L64(0x597f299cfc657e2a), L64(0x5fcb6fab3ad6faec), L64(0x6c44198c4a475817) };
-#else
-static const unsigned long SHA512_K[128] = {
-  L64(0x428a2f98d728ae22ll), L64(0x7137449123ef65cdll), L64(0xb5c0fbcfec4d3b2fll), L64(0xe9b5dba58189dbbcll),
-  L64(0x3956c25bf348b538ll), L64(0x59f111f1b605d019ll), L64(0x923f82a4af194f9bll), L64(0xab1c5ed5da6d8118ll),
-  L64(0xd807aa98a3030242ll), L64(0x12835b0145706fbell), L64(0x243185be4ee4b28cll), L64(0x550c7dc3d5ffb4e2ll),
-  L64(0x72be5d74f27b896fll), L64(0x80deb1fe3b1696b1ll), L64(0x9bdc06a725c71235ll), L64(0xc19bf174cf692694ll),
-  L64(0xe49b69c19ef14ad2ll), L64(0xefbe4786384f25e3ll), L64(0x0fc19dc68b8cd5b5ll), L64(0x240ca1cc77ac9c65ll),
-  L64(0x2de92c6f592b0275ll), L64(0x4a7484aa6ea6e483ll), L64(0x5cb0a9dcbd41fbd4ll), L64(0x76f988da831153b5ll),
-  L64(0x983e5152ee66dfabll), L64(0xa831c66d2db43210ll), L64(0xb00327c898fb213fll), L64(0xbf597fc7beef0ee4ll),
-  L64(0xc6e00bf33da88fc2ll), L64(0xd5a79147930aa725ll), L64(0x06ca6351e003826fll), L64(0x142929670a0e6e70ll),
-  L64(0x27b70a8546d22ffcll), L64(0x2e1b21385c26c926ll), L64(0x4d2c6dfc5ac42aedll), L64(0x53380d139d95b3dfll),
-  L64(0x650a73548baf63dell), L64(0x766a0abb3c77b2a8ll), L64(0x81c2c92e47edaee6ll), L64(0x92722c851482353bll),
-  L64(0xa2bfe8a14cf10364ll), L64(0xa81a664bbc423001ll), L64(0xc24b8b70d0f89791ll), L64(0xc76c51a30654be30ll),
-  L64(0xd192e819d6ef5218ll), L64(0xd69906245565a910ll), L64(0xf40e35855771202all), L64(0x106aa07032bbd1b8ll),
-  L64(0x19a4c116b8d2d0c8ll), L64(0x1e376c085141ab53ll), L64(0x2748774cdf8eeb99ll), L64(0x34b0bcb5e19b48a8ll),
-  L64(0x391c0cb3c5c95a63ll), L64(0x4ed8aa4ae3418acbll), L64(0x5b9cca4f7763e373ll), L64(0x682e6ff3d6b2b8a3ll),
-  L64(0x748f82ee5defb2fcll), L64(0x78a5636f43172f60ll), L64(0x84c87814a1f0ab72ll), L64(0x8cc702081a6439ecll),
-  L64(0x90befffa23631e28ll), L64(0xa4506cebde82bde9ll), L64(0xbef9a3f7b2c67915ll), L64(0xc67178f2e372532bll),
-  L64(0xca273eceea26619cll), L64(0xd186b8c721c0c207ll), L64(0xeada7dd6cde0eb1ell), L64(0xf57d4f7fee6ed178ll),
-  L64(0x06f067aa72176fball), L64(0x0a637dc5a2c898a6ll), L64(0x113f9804bef90daell), L64(0x1b710b35131c471bll),
-  L64(0x28db77f523047d84ll), L64(0x32caab7b40c72493ll), L64(0x3c9ebe0a15c9bebcll), L64(0x431d67c49c100d4cll),
-  L64(0x4cc5d4becb3e42b6ll), L64(0x597f299cfc657e2all), L64(0x5fcb6fab3ad6faecll), L64(0x6c44198c4a475817ll) };
-#endif // __i386__
 
 /*
   Encodes input (unsigned long) into output (unsigned char). Assumes len is
@@ -621,7 +597,6 @@ void hash_sha384::hash_init(void *context_) {
   context->count[0] = context->count[1] = 0;
   /* Load magic initialization constants.
    */
-#ifndef __i386__
   context->state[0] = L64(0xcbbb9d5dc1059ed8);
   context->state[1] = L64(0x629a292a367cd507);
   context->state[2] = L64(0x9159015a3070dd17);
@@ -630,16 +605,6 @@ void hash_sha384::hash_init(void *context_) {
   context->state[5] = L64(0x8eb44a8768581511);
   context->state[6] = L64(0xdb0c2e0d64f98fa7);
   context->state[7] = L64(0x47b5481dbefa4fa4);
-#else
-  context->state[0] = L64(0xcbbb9d5dc1059ed8ll);
-  context->state[1] = L64(0x629a292a367cd507ll);
-  context->state[2] = L64(0x9159015a3070dd17ll);
-  context->state[3] = L64(0x152fecd8f70e5939ll);
-  context->state[4] = L64(0x67332667ffc00b31ll);
-  context->state[5] = L64(0x8eb44a8768581511ll);
-  context->state[6] = L64(0xdb0c2e0d64f98fa7ll);
-  context->state[7] = L64(0x47b5481dbefa4fa4ll);
-#endif
 }
 
 /*
@@ -775,7 +740,6 @@ void hash_sha512::hash_init(void *context_) {
   context->count[0] = context->count[1] = 0;
   /* Load magic initialization constants.
    */
-#ifndef __i386__
   context->state[0] = L64(0x6a09e667f3bcc908);
   context->state[1] = L64(0xbb67ae8584caa73b);
   context->state[2] = L64(0x3c6ef372fe94f82b);
@@ -784,16 +748,6 @@ void hash_sha512::hash_init(void *context_) {
   context->state[5] = L64(0x9b05688c2b3e6c1f);
   context->state[6] = L64(0x1f83d9abfb41bd6b);
   context->state[7] = L64(0x5be0cd19137e2179);
-#else
-  context->state[0] = L64(0x6a09e667f3bcc908ll);
-  context->state[1] = L64(0xbb67ae8584caa73bll);
-  context->state[2] = L64(0x3c6ef372fe94f82bll);
-  context->state[3] = L64(0xa54ff53a5f1d36f1ll);
-  context->state[4] = L64(0x510e527fade682d1ll);
-  context->state[5] = L64(0x9b05688c2b3e6c1fll);
-  context->state[6] = L64(0x1f83d9abfb41bd6bll);
-  context->state[7] = L64(0x5be0cd19137e2179ll);
-#endif
 }
 
 /*
