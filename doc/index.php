@@ -5,8 +5,14 @@ if (isset($_GET['css'])) $css = $_GET['css'];
 echo "<link type='text/css' rel='stylesheet' href='$css.css' />";
 
 $file = 'coding_guideline';
-if (isset($_GET['file'])) $file = $_GET['file'];
-$doc = file_get_contents(realpath(dirname(__FILE__))."/$file");
+$dir = realpath(dirname(__FILE__));
+if (isset($_GET['file'])) {
+  $path = realpath($dir.'/'.$_GET['file']);
+  if (!strncmp($dir, $path, strlen($dir))) {
+    $file = $_GET['file']; 
+  }
+}
+$doc = file_get_contents("$dir/$file");
 
 echo '<table cellpadding=0 cellspacing=0 border=0 bgcolor="#3B5998">';
 echo '<tr><td valign=top width=200>';
