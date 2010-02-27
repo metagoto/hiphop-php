@@ -52,6 +52,7 @@ install: $(EXT) lists
 	touch ../lib/system/builtin_symbols.cpp
 	mv test_ext_$<.h test_ext_$<.cpp ../test/
 	$(REPO_ADD) ../test/test_ext_$<.h ../test/test_ext_$<.cpp
+	make -C ../lib/system
 
 # run this to add or remove a function from an existing idl file
 update: $(EXT) lists
@@ -62,8 +63,9 @@ remove:
 	@echo 'Removing extension index...'
 	$(V)perl -p -i -n -e "s/#include \"$(EXT)\.inc\"\n//" \
 		../lib/system/ext.inc
+	$(REPO_DEL) ../lib/system/$(EXT).inc
 	@echo 'Regenerating dynamic tables...'
-	make -C ../ clean && make -C ../ && make -C ../lib/system
+	###make -C ../ clean && make -C ../ && make -C ../lib/system
 	@echo 'Removing list files...'
 	$(V)perl -p -i -n -e "s/#include <test\/test_ext_$(EXT)\.h>\n//" \
 		../test/test_ext.h
@@ -72,13 +74,13 @@ remove:
 	$(V)perl -p -i -n -e "s/#include .*extprofile_$(EXT).h>\n//" \
 		../cpp/ext/ext.h
 	@echo 'Removing source files...'
+	$(REPO_DEL) ../cpp/ext/profile/extprofile_$(EXT).h
 	$(REPO_DEL) ../test/test_ext_$(EXT).h
 	$(REPO_DEL) ../test/test_ext_$(EXT).cpp
 	$(REPO_DEL) ../cpp/ext/ext_$(EXT).h
 	$(REPO_DEL) ../cpp/ext/ext_$(EXT).cpp
 	@echo 'Removing IDL file...'
 	$(REPO_DEL) $(EXT).idl.php
-	make -C ../ clean && make -C ../
 
 clobber:
 	$(V)rm -f *~ $(patsubst %.idl.php, %, $(IDL_PHPS)) $(patsubst %.idl.php, ext_%.h, $(IDL_PHPS)) $(patsubst %.idl.php, ext_%.cpp, $(IDL_PHPS)) $(patsubst %.idl.php, %.inc, $(IDL_PHPS)) $(patsubst %.idl.php, test_ext_%.h, $(IDL_PHPS)) $(patsubst %.idl.php, test_ext_%.cpp, $(IDL_PHPS))
