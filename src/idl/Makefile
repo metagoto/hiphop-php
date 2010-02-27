@@ -44,18 +44,18 @@ $(EXT): $(EXT).idl.php idl.php base.php
 
 # run this for a newly prepared idl file
 install: $(EXT) lists
-	cp ext_$<.h ext_$<.cpp ../cpp/ext/
+	mv ext_$<.h ext_$<.cpp ../cpp/ext/
 	$(REPO_ADD) ../cpp/ext/ext_$<.h ../cpp/ext/ext_$<.cpp
 	$(REPO_ADD) ../cpp/ext/profile/extprofile_$<.h
-	cp $<.inc ../lib/system/
+	mv $<.inc ../lib/system/
 	$(REPO_ADD) ../lib/system/$<.inc
 	touch ../lib/system/builtin_symbols.cpp
-	cp test_ext_$<.h test_ext_$<.cpp ../test/
+	mv test_ext_$<.h test_ext_$<.cpp ../test/
 	$(REPO_ADD) ../test/test_ext_$<.h ../test/test_ext_$<.cpp
 
 # run this to add or remove a function from an existing idl file
 update: $(EXT) lists
-	cp $<.inc ../lib/system/
+	mv $<.inc ../lib/system/
 	touch ../lib/system/builtin_symbols.cpp
 
 remove:
@@ -63,7 +63,7 @@ remove:
 	$(V)perl -p -i -n -e "s/#include \"$(EXT)\.inc\"\n//" \
 		../lib/system/ext.inc
 	@echo 'Regenerating dynamic tables...'
-	make -C ../ clobber && make -C ../ && make -C ../lib/system
+	make -C ../ clean && make -C ../ && make -C ../lib/system
 	@echo 'Removing list files...'
 	$(V)perl -p -i -n -e "s/#include <test\/test_ext_$(EXT)\.h>\n//" \
 		../test/test_ext.h
@@ -78,7 +78,7 @@ remove:
 	$(REPO_DEL) ../cpp/ext/ext_$(EXT).cpp
 	@echo 'Removing IDL file...'
 	$(REPO_DEL) $(EXT).idl.php
-	make -C ../ clobber && make -C ../
+	make -C ../ clean && make -C ../
 
 clobber:
 	$(V)rm -f *~ $(patsubst %.idl.php, %, $(IDL_PHPS)) $(patsubst %.idl.php, ext_%.h, $(IDL_PHPS)) $(patsubst %.idl.php, ext_%.cpp, $(IDL_PHPS)) $(patsubst %.idl.php, %.inc, $(IDL_PHPS)) $(patsubst %.idl.php, test_ext_%.h, $(IDL_PHPS)) $(patsubst %.idl.php, test_ext_%.cpp, $(IDL_PHPS))
