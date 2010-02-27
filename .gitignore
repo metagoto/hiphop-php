@@ -34,3 +34,7 @@ src/hphpi/hphpi
 *.cmake
 CMakeFiles
 CMakeCache.txt
+
+# default doc server pid
+www.pid
+
