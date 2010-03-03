@@ -22,7 +22,7 @@ HipHop is a source code transformer which transforms PHP source code into highly
 * libcap
 * gd
 * zlib
-* tbb *Intel's Thread Building Blocks*
+* [tbb](http://www.threadingbuildingblocks.org) *Intel's Thread Building Blocks 2.2 is the minimum version*
 * [Oniguruma](http://www.geocities.jp/kosako3/oniguruma/)
 
 The following packages have had slight modifications added to them. Patches are provided and should be made against the current source copies.
